@@ -5,30 +5,34 @@ import { StatusBar } from 'expo-status-bar';
 import { Camera } from 'expo-camera';
 
 export default function Permisos() {
-    const [respuesta, setRespuesta] = useState(null);
-    const [origen, setOrigen] = useState('');
+    const [respuesta, setRespuesta] = useState(null); //devuelve el permiso
+    const [origen, setOrigen] = useState(''); //acción que produjo ese resultado
 
-    //get: solo lee el estado. Nunca abre un cuadro de diálogo.
+    //get: Solo lee el estado. Nunca abre un cuadro de diálogo.
+    //async porque la consulta tarda un tiempo
     const consultar = async () => {
-        const resultado = await
-            Camera.getCameraPermissionsAsync();
-        setRespuesta(resultado);
+        //await espera la respuesta
+        //getCameraPermissionsAsync() obtiene el permiso de usar la cámara
+        const resultado = await Camera.getCameraPermissionsAsync();
+        setRespuesta(resultado); //guarda el resultado
         setOrigen('get (solo lectura)');
     };
 
-    //request: abre el cuadro del sistema si todavía se puede preguntar
+    //request: Abre el cuadro del sistema si todavía se puede preguntar
     const solicitar = async () => {
-        const resultado = await
-            Camera.requestCameraPermissionsAsync();
-        setRespuesta(resultado);
+        //await espera la respuesta
+        //requestCameraPermissionsAsync() solicita permiso de usar la cámara
+        const resultado = await Camera.requestCameraPermissionsAsync();
+        setRespuesta(resultado); //guarda el resultado
         setOrigen('request (pregunta al usuario)');
     };
-
+    
     //Al abrir la app solo consultamos: no molestamos al usuario
     useEffect(() => {
         consultar();
     }, []);
 
+    //Si "granted" es verdadero es verde, de lo contrario, rojo
     const colorEstado = respuesta?.granted ? '#15803D' : '#B91C1C';
 
     return (
@@ -42,6 +46,7 @@ export default function Permisos() {
                     <Text style={[styles.estado, {
                         color: colorEstado
                     }]}>
+                        {/*El estado textual del permiso*/}
                         status: {respuesta.status}
                     </Text>
                     <Text style={styles.dato}>granted:
@@ -56,8 +61,7 @@ export default function Permisos() {
                 <Button title="Consultar (get)" onPress={consultar} />
             </View>
             <View style={styles.boton}>
-                <Button title="Solicitar (request)" color="#7C3AED"
-                    onPress={solicitar} />
+                <Button title="Solicitar (request)" color="#7C3AED" onPress={solicitar} />
             </View>
         </View>
     );
@@ -70,7 +74,7 @@ const styles = StyleSheet.create({
         padding: 24,
         backgroundColor: '#F6F6F6',
     },
-    
+
     titulo: {
         fontSize: 24, 
         fontWeight: 'bold', 
