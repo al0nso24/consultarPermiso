@@ -49,6 +49,8 @@ export default function Permisos() {
                         {/*El estado textual del permiso*/}
                         status: {respuesta.status}
                     </Text>
+                    {/*Las llamadas a String(...) convierten valores como true y 
+                    false en texto que pueda mostrarse en pantalla*/}
                     <Text style={styles.dato}>granted:
                         {String(respuesta.granted)}</Text>
                     <Text style={styles.dato}>canAskAgain:
